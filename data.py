@@ -8,5 +8,10 @@
 # -- repository: YOUR REPOSITORY URL                                                                     -- #
 # -- --------------------------------------------------------------------------------------------------- -- #
 """
+#%%
+import pandas as pd
 
-dict_test = {'key_a': 'a', 'key_b': 'b'}
+unenrate = pd.read_csv('files\\Unemployment Rate - United States.csv')
+
+
+# %%
