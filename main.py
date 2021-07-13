@@ -10,39 +10,40 @@
 """
 
 import pandas as pd
-import data as dt
+import functions_PyMetatrader5 as fnmt5
+import functions as fn
+import visualizations as vs
 
-# -- TEST 1 : 
-# verify that the script is being read
-print(dt.dict_test)
 
-# -- TEST 2 :
-# verify that installed pandas module works correctly
-df_dict_test = pd.DataFrame(dt.dict_test, index=[0, 1])
-print(df_dict_test)
+#%%
+# Archivo con el índice a usar
+indice = pd.read_csv('files\\Unemployment Rate - United States.csv', index_col='DateTime')
+# Eliminar columan de revised
+indice.drop('Revised', axis=1, inplace=True)
+# Convertir a datetime la columna de fechas
+indice.index = pd.to_datetime(indice.index)
 
-# -- TEST 3 :
-# verify you can use plotly and visualize plots in jupyter notebook
+#%%
+# Ejecutables
+# local_exe = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe'
+local_exe = 'C:\\Archivos de programa\\MetaTrader 5 Terminal\\terminal64.exe'
 
-import chart_studio.plotly as py   # various tools (jupyter offline print)
-import plotly.graph_objects as go  # plotting engine
+# Número de cuenta
+mt5_acc = 5383442
+# Contraseña
+mt5_pass = "44GxKTtf"
+# Inicialización de mt5
+mt5_client = fnmt5.f_init_login(mt5_acc, mt5_pass, local_exe)
 
-# example data
-df = pd.DataFrame({'column_a': [1, 2, 3, 4, 5], 'column_b': [1, 2, 3, 4, 5]})
-# basic plotly plot
-data = [go.Bar(x=df['column_a'], y=df['column_b'])]
-# instruction to view it inside jupyter
-py.iplot(data, filename='jupyter-basic_bar')
-# (alternatively) instruction to view it in web app of plotly
-# py.plot(data)
+# Escenarios para validaciones visuales
+symbol = 'USDCHF'
+escenario1, escenario2, escenario3, escenario4, escenario5 = fn.validadiciones(indice, mt5_client, symbol)
 
-# -- TEST 4 :
-# verify you can use plotly and visualize plots in web browser locally
+# Graficos de velas para cada escenario
+vs.candle_stick_plot(escenario1)
+vs.candle_stick_plot(escenario2)
+vs.candle_stick_plot(escenario3)
+vs.candle_stick_plot(escenario4)
+vs.candle_stick_plot(escenario5)
 
-import plotly.io as pio            # to define input-output of plots
-pio.renderers.default = "browser"  # to render the plot locally in your default web browser
 
-# basic plotly plot
-plot_data = go.Figure(go.Bar(x=df['column_a'], y=df['column_b']))
-# instruction to view it in specified render (in this case browser)
-plot_data.show()
