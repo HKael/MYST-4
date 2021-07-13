@@ -277,9 +277,87 @@ def f_hist_prices(param_ct, param_sym, param_tf, param_ini, param_end):
     for symbol in param_sym:
         # prices retrival from MetaTrader 5 Desktop App
         prices = pd.DataFrame(param_ct.copy_rates_range(symbol, param_tf,
-                                                        param_ini + tdelta,
-                                                        param_end + tdelta))
+                                                        param_ini,
+                                                        param_end))
         # convert to datetime 
+        # prices['time'] = [datetime.datetime.fromtimestamp(times) for times in prices['time']]
+
+        # store in dict with symbol as a key
+        d_prices[symbol] = prices
+
+    # return historical prices
+    return d_prices
+
+
+def f_hist_prices_from(param_ct, param_sym, param_tf, param_ini, count):
+    """
+    Historical prices retrival from MetaTrader 5 Desktop App.
+
+    Parameters
+    ----------
+
+    param_ct: MetaTrader5 initialized client object
+        This is an already succesfully initialized conexion object to MetaTrader5 Desktop App
+
+    param_sym: str
+        The symbol of which the historical prices will be retrieved
+
+        param_sym = 'EURUSD'
+
+    param_tf: str
+        The price granularity for the historical prices. Check available timeframes and nomenclatures from
+        the references. The substring 'TIMEFRAME_' is automatically added.
+
+        param_tf = 'M1'
+    param_ini: datetime
+        Initial date to draw the historical trades
+
+        param_ini = datetime(2021, 2, 1)
+    count: end
+        Number of bars
+
+        param_end = datetime(2021, 3, 1)
+
+    **** WARNINGS ****
+
+    1.- Available History
+
+        MetaTrader 5 terminal provides bars only within a history available to a user on charts. The number of # bars available to users is set in the "Max.bars in chart" parameter. So this must be done
+        manually within the desktop app to which the connection is made.
+
+    2.- TimeZone
+        When creating the 'datetime' object, Python uses the local time zone,
+        MetaTrader 5 stores tick and bar open time in UTC time zone (without the shift).
+        Data received from the MetaTrader 5 terminal has UTC time.
+        Perform a validation whether if its necessary to shift time to local timezone.
+
+    **** ******** ****
+
+    References
+    ----------
+    https://www.mql5.com/en/docs/integration/python_metatrader5/mt5copyratesfrom_py#timeframe
+
+    """
+
+    # get hour info in UTC timezone (also GMT+0)
+    hour_utc = datetime.datetime.now().utcnow().hour
+    # get hour info in local timezone (your computer)
+    hour_here = datetime.datetime.now().hour
+    # difference (in hours) from UTC timezone
+    diff_here_utc = hour_utc - hour_here
+    # store the difference in hours
+    tdelta = datetime.timedelta(hours=diff_here_utc)
+    # granularity
+    param_tf = getattr(param_ct, 'TIMEFRAME_' + param_tf)
+    # dictionary for more than 1 symbol to retrieve prices
+    d_prices = {}
+
+    # retrieve prices for every symbol in the list
+    for symbol in param_sym:
+        # prices retrival from MetaTrader 5 Desktop App
+        prices = pd.DataFrame(param_ct.copy_rates_from(symbol, param_tf,
+                                                        param_ini, count))
+        # convert to datetime
         # prices['time'] = [datetime.datetime.fromtimestamp(times) for times in prices['time']]
 
         # store in dict with symbol as a key

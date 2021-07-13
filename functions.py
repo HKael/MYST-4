@@ -14,10 +14,8 @@ import datetime
 
 import functions_PyMetatrader5 as fnmt5
 
-def is_dst(when):
-    return when.dst() != datetime.timedelta(0)
 
-def validadiciones(df_index: pd.DataFrame, mt5_client, symbol: str):
+def validadiciones(df_index: pd.DataFrame, mt5_client, symbol):
     # semilla
     np.random.seed(545)
     # 5 fechas aleatorioas
@@ -25,15 +23,7 @@ def validadiciones(df_index: pd.DataFrame, mt5_client, symbol: str):
     # Agregamos media hora a todas las fechas
     tf = datetime.timedelta(hours=0.5)
     # Ajusta para daylight savings
-    dst_adjust = datetime.timedelta(hours=1)
-    dates = []
-    for i in escenarios:
-        # Verificamos si hay daylight savvings
-        if is_dst(df_index.iloc[i].name):
-            dates.append(
-                [df_index.iloc[i].name + dst_adjust, df_index.iloc[i].name + tf + dst_adjust])
-        else:
-            dates.append([df_index.iloc.iloc[i].name, df_index.iloc[i].name + tf])
+    dates = [[df_index.iloc[i].name, df_index.iloc[i].name + tf] for i in escenarios]
 
     # descarga de precios
     prices = [fnmt5.f_hist_prices(mt5_client, [symbol], 'M1', dates[i][0], dates[i][-1]).get(symbol) for i in
@@ -41,18 +31,18 @@ def validadiciones(df_index: pd.DataFrame, mt5_client, symbol: str):
 
     # separacion y columnas de tiempo
     escenario1 = prices[0]
-    escenario1['time'] = [datetime.datetime.fromtimestamp(times) for times in escenario1['time']]
+    escenario1['time'] = [datetime.datetime.utcfromtimestamp(times) for times in escenario1['time']]
 
     escenario2 = prices[1]
-    escenario2['time'] = [datetime.datetime.fromtimestamp(times) for times in escenario2['time']]
+    escenario2['time'] = [datetime.datetime.utcfromtimestamp(times) for times in escenario2['time']]
 
     escenario3 = prices[2]
-    escenario3['time'] = [datetime.datetime.fromtimestamp(times) for times in escenario3['time']]
+    escenario3['time'] = [datetime.datetime.utcfromtimestamp(times) for times in escenario3['time']]
 
     escenario4 = prices[3]
-    escenario4['time'] = [datetime.datetime.fromtimestamp(times) for times in escenario4['time']]
+    escenario4['time'] = [datetime.datetime.utcfromtimestamp(times) for times in escenario4['time']]
 
     escenario5 = prices[4]
-    escenario5['time'] = [datetime.datetime.fromtimestamp(times) for times in escenario5['time']]
+    escenario5['time'] = [datetime.datetime.utcfromtimestamp(times) for times in escenario5['time']]
 
     return escenario1, escenario2, escenario3, escenario4, escenario5
