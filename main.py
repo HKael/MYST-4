@@ -49,4 +49,9 @@ vs.candle_stick_plot(escenario3)
 vs.candle_stick_plot(escenario4)
 vs.candle_stick_plot(escenario5)
 
+# DataFrame escenarios
+
+df_escenarios = fn.func_df_escenarios(indice, symbol, mt5_client)
+
+
 

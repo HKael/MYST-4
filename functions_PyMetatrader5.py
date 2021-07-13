@@ -260,14 +260,6 @@ def f_hist_prices(param_ct, param_sym, param_tf, param_ini, param_end):
 
     """
 
-    # get hour info in UTC timezone (also GMT+0)
-    hour_utc = datetime.datetime.now().utcnow().hour
-    # get hour info in local timezone (your computer)
-    hour_here = datetime.datetime.now().hour
-    # difference (in hours) from UTC timezone
-    diff_here_utc = hour_utc - hour_here
-    # store the difference in hours
-    tdelta = datetime.timedelta(hours=diff_here_utc)
     # granularity 
     param_tf = getattr(param_ct, 'TIMEFRAME_' + param_tf)
     # dictionary for more than 1 symbol to retrieve prices
@@ -335,18 +327,10 @@ def f_hist_prices_from(param_ct, param_sym, param_tf, param_ini, count):
 
     References
     ----------
-    https://www.mql5.com/en/docs/integration/python_metatrader5/mt5copyratesfrom_py#timeframe
+    https://www.mql5.com/en/docs/integration/python_metatrader5/mt5copyratesfrom_py
 
     """
 
-    # get hour info in UTC timezone (also GMT+0)
-    hour_utc = datetime.datetime.now().utcnow().hour
-    # get hour info in local timezone (your computer)
-    hour_here = datetime.datetime.now().hour
-    # difference (in hours) from UTC timezone
-    diff_here_utc = hour_utc - hour_here
-    # store the difference in hours
-    tdelta = datetime.timedelta(hours=diff_here_utc)
     # granularity
     param_tf = getattr(param_ct, 'TIMEFRAME_' + param_tf)
     # dictionary for more than 1 symbol to retrieve prices
