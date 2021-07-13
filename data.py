@@ -11,7 +11,13 @@
 #%%
 import pandas as pd
 
+
 unenrate = pd.read_csv('files\\Unemployment Rate - United States.csv')
+unenrate['DateTime'] = pd.to_datetime(unenrate['DateTime'])
+unenrate = unenrate[['DateTime','Actual','Consensus','Previous']]
+unenrate = unenrate.set_index('DateTime')
+
+
 
 
 # %%
