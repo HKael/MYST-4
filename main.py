@@ -23,6 +23,9 @@ indice.drop('Revised', axis=1, inplace=True)
 # Convertir a datetime la columna de fechas
 indice.index = pd.to_datetime(indice.index)
 
+# Faltante en previous
+indice.iloc[-1]['Previous'] = indice.iloc[-2]['Actual']
+
 #%%
 # Ejecutables
 # local_exe = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe'

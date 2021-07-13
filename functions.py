@@ -14,6 +14,8 @@ import datetime
 
 import functions_PyMetatrader5 as fnmt5
 
+def is_dst(when):
+    return when.dst() != datetime.timedelta(0)
 
 def validadiciones(df_index: pd.DataFrame, mt5_client, symbol: str):
     # semilla
@@ -21,8 +23,18 @@ def validadiciones(df_index: pd.DataFrame, mt5_client, symbol: str):
     # 5 fechas aleatorioas
     escenarios = np.random.choice([i for i in range(len(df_index))], 5)
     # Agregamos media hora a todas las fechas
-    dates = [[df_index.iloc[i].name, df_index.iloc[i].name + datetime.timedelta(hours=0.5)] for i in
-             escenarios]
+    tf = datetime.timedelta(hours=0.5)
+    # Ajusta para daylight savings
+    dst_adjust = datetime.timedelta(hours=1)
+    dates = []
+    for i in escenarios:
+        # Verificamos si hay daylight savvings
+        if is_dst(df_index.iloc[i].name):
+            dates.append(
+                [df_index.iloc[i].name + dst_adjust, df_index.iloc[i].name + tf + dst_adjust])
+        else:
+            dates.append([df_index.iloc.iloc[i].name, df_index.iloc[i].name + tf])
+
     # descarga de precios
     prices = [fnmt5.f_hist_prices(mt5_client, [symbol], 'M1', dates[i][0], dates[i][-1]).get(symbol) for i in
               range(len(dates))]
