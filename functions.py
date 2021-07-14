@@ -7,10 +7,16 @@
 # -- repository: YOUR REPOSITORY URL                                                                     -- #
 # -- --------------------------------------------------------------------------------------------------- -- #
 """
-
+import grubbs as grubbs
 import pandas as pd
 import numpy as np
 import datetime
+
+from matplotlib import pyplot, pyplot as plt
+from scipy.stats import shapiro
+from statsmodels.graphics.tsaplots import plot_pacf, plot_acf
+from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.tsa.stattools import adfuller
 
 import functions_PyMetatrader5 as fnmt5
 
@@ -59,8 +65,8 @@ def escenarios(fila):
         escenario = 'D'
     return escenario
 
-def func_df_escenarios(indice: pd.DataFrame, symbol, mt5_client):
 
+def func_df_escenarios(indice: pd.DataFrame, symbol, mt5_client):
     df_escenarios_f = pd.DataFrame(index=indice.index)
     df_escenarios_f['Escenario'] = [escenarios(indice.iloc[i].to_list()) for i in range(len(indice))]
 
@@ -106,3 +112,54 @@ def func_df_escenarios(indice: pd.DataFrame, symbol, mt5_client):
     df_escenarios_f['volatilidad'] = vol
 
     return df_escenarios_f
+
+
+# Statistical aspect
+
+def acf(param_data):
+    return plot_acf(param_data)
+
+
+def pacf(param_data):
+    return plot_pacf(param_data)
+
+
+def norm_test(param_data):
+    stat, p = shapiro(param_data)
+    y = print('Statistics=%.3f, p=%.3f' % (stat, p))
+    # interpret
+    alpha = 0.05
+    if p > alpha:
+        x = print('Sample looks Gaussian (fail to reject H0)')
+    else:
+        x = print('Sample does not look Gaussian (reject H0)')
+    return y, x
+
+
+def stationarity(param_data):
+    X = param_data.values
+    result = adfuller(X)
+    a = print('ADF Statistic: %f' % result[0])
+    b = print('p-value: %f' % result[1])
+    c = print('Critical Values:')
+    if result[1] > 0.05:
+        d = print("No stationarity detected")
+    else:
+        d = print("Stationarity detected")
+    return a, b, c, d
+
+
+def seasonality(param_data):
+    result_mult = seasonal_decompose(param_data, model='multiplicative')
+    result_addi = seasonal_decompose(param_data, model='additive', period=1)
+    result_mult.plot()
+    result_addi.plot()
+    return pyplot.show()
+
+
+def outlier(param_data):
+    # Data
+    a = grubbs.test(param_data, alpha=.05)
+    # Visual
+    b = plt.boxplot(param_data)
+    return a, b
