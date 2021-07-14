@@ -114,7 +114,7 @@ def func_df_escenarios(indice: pd.DataFrame, symbol, mt5_client):
     return df_escenarios_f
 
 
-# Statistical aspect
+# %% Statistical aspect
 
 def acf(param_data):
     return plot_acf(param_data)
