@@ -14,4 +14,11 @@ chart_studio>=1.1
 plotly>=4.14
 statsmodels
 MetaTrader5
+statsmodels.graphics.tsaplots
+statsmodels.tsa.stattools
+statsmodels.tsa.seasonal
+statsmodels.api
+scipy.stats
+scipy
+grubbs
 
