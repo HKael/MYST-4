@@ -17,4 +17,7 @@ def candle_stick_plot(df: pd.DataFrame):
                           open=df['open'], high=df['high'], low=df['low'], close=df['close'])])
 
     fig.update_layout(xaxis_rangeslider_visible=False)
+
+    fig.update_layout(title='USD/CHF')
+
     fig.show()
