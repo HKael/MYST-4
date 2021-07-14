@@ -15,8 +15,11 @@ import datetime
 from matplotlib import pyplot, pyplot as plt
 from scipy.stats import shapiro
 from statsmodels.graphics.tsaplots import plot_pacf, plot_acf
+from statsmodels.stats.diagnostic import het_breuschpagan
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import adfuller
+import scikit_posthocs as sp
+import statsmodels.api as sm
 
 import functions_PyMetatrader5 as fnmt5
 
@@ -116,50 +119,96 @@ def func_df_escenarios(indice: pd.DataFrame, symbol, mt5_client):
 
 # %% Statistical aspect
 
+
 def acf(param_data):
-    return plot_acf(param_data)
+    plt.rcParams["figure.figsize"] = (16, 6)
+    plot_acf(param_data)
+    return
 
 
 def pacf(param_data):
-    return plot_pacf(param_data)
+    plt.rcParams["figure.figsize"] = (16, 6)
+    plot_pacf(param_data)
+    return
+
+
+def regression(x, y):
+    x = sm.add_constant(x)
+    model = sm.OLS(y, x).fit()
+    print(model.summary())
+    return
+
+
+def regression_v(x, y):
+    x = sm.add_constant(x)
+    model = sm.OLS(y, x).fit()
+    B0 = model.params[0]
+    B1 = model.params[1]
+    x = x[:, 1]
+    x2 = np.linspace(x.min(), x.max(), 100)
+    y_hat = x2 * B1 + B0
+    plt.scatter(x, y)
+    plt.plot(x2, y_hat, "r")
+    return
+
+
+def heteroskedasticity(param_data):
+    summ = sm.OLS(param_data.index, param_data["Actual"]).fit()
+    comp = param_data[["Actual", "Consensus"]]
+    bp_test = het_breuschpagan(summ.resid, comp)
+    print('LM Statistic: %f' % bp_test[0])
+    print('LM Statistic p-value: %f' % bp_test[1])
+    print('F-Statistic: %f' % bp_test[2])
+    print('F-Statistic p-value: %f' % bp_test[3])
+    if bp_test[1] < 0.05:
+        print("Heteroskedasticity is indicated if p <0.05, so according to these tests, this model is heteroskedastic.")
+    else:
+        print("Heteroskedasticity is indicated if p <0.05, so according to these tests, this model is not "
+              "heteroskedastic.")
+    return
 
 
 def norm_test(param_data):
     stat, p = shapiro(param_data)
-    y = print('Statistics=%.3f, p=%.3f' % (stat, p))
+    print('Statistics=%.3f, p=%.3f' % (stat, p))
     # interpret
     alpha = 0.05
     if p > alpha:
-        x = print('Sample looks Gaussian (fail to reject H0)')
+        print('Sample looks Gaussian (fail to reject H0)')
+        print(" Sample has normal distribution")
     else:
-        x = print('Sample does not look Gaussian (reject H0)')
-    return y, x
+        print('Sample does not look Gaussian (reject H0)')
+        print("Sample does not have normal distribution")
+    return
 
 
 def stationarity(param_data):
     X = param_data.values
     result = adfuller(X)
-    a = print('ADF Statistic: %f' % result[0])
-    b = print('p-value: %f' % result[1])
-    c = print('Critical Values:')
+    print('ADF Statistic: %f' % result[0])
+    print('p-value: %f' % result[1])
+    print('Critical Values:')
     if result[1] > 0.05:
-        d = print("No stationarity detected")
+        print("No stationarity detected")
     else:
-        d = print("Stationarity detected")
-    return a, b, c, d
+        print("Stationarity detected")
+    return
 
 
 def seasonality(param_data):
-    result_mult = seasonal_decompose(param_data, model='multiplicative')
-    result_addi = seasonal_decompose(param_data, model='additive', period=1)
-    result_mult.plot()
-    result_addi.plot()
-    return pyplot.show()
+    plt.rcParams["figure.figsize"] = (12, 12)
+    decomposition = sm.tsa.seasonal_decompose(param_data, model='additive', period=12)
+    decomposition.plot()
+    return plt.show()
 
 
-def outlier(param_data):
-    # Data
-    a = grubbs.test(param_data, alpha=.05)
-    # Visual
-    b = plt.boxplot(param_data)
-    return a, b
+def outlier_v(param_data):
+    plt.rcParams["figure.figsize"] = (16, 8)
+    plt.boxplot(param_data)
+    plt.title("Outlier Value Boxplot Visual Detection")
+    plt.show()
+    if len(param_data) == len(sp.outliers_grubbs(param_data)):
+        print("No outliers detected")
+    else:
+        print("Outlier detected")
+    return
