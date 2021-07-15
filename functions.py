@@ -212,3 +212,20 @@ def outlier_v(param_data):
     else:
         print("Outlier detected")
     return
+
+
+def op(timestamp, initial, final, maxp, minp, position, tp, sl):
+    if position == 'Buy':
+        tp = initial + tp / 10000
+        sl = initial - sl / 10000
+    else:
+        tp = initial - tp / 10000
+        sl = initial + sl / 10000
+
+    df = pd.DataFrame(
+        {'Operation Parameter': ['TimeStamp', 'Window', 'Initial Price', 'Final Price', 'Maximum Price', 'Minimum Price',
+                            'Stop Loss', 'Take Profit', 'Volume', 'Capital', 'Position'],
+         'Operation Value': [timestamp, '00:30:00', '$ ' + str(initial), '$ ' + str(final), '$ ' + str(maxp),
+                             '$ ' + str(minp),
+                             "$ " + str(sl), "$ " + str(tp), int(1000 / initial), '1000 USD', position], })
+    return df
