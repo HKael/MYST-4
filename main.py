@@ -1,4 +1,3 @@
-
 """
 # -- --------------------------------------------------------------------------------------------------- -- #
 # -- project: A SHORT DESCRIPTION OF THE PROJECT                                                         -- #
@@ -8,14 +7,13 @@
 # -- repository: YOUR REPOSITORY URL                                                                     -- #
 # -- --------------------------------------------------------------------------------------------------- -- #
 """
-#%%
+# %%
 import pandas as pd
 import functions_PyMetatrader5 as fnmt5
 import functions as fn
 import visualizations as vs
 
-
-#%%
+# %%
 # Archivo con el índice a usar
 indice = pd.read_csv('files\\Unemployment Rate - United States.csv', index_col='DateTime')
 # Eliminar columan de revised
@@ -26,9 +24,10 @@ indice.index = pd.to_datetime(indice.index)
 # Faltante en previous
 indice.iloc[-1]['Previous'] = indice.iloc[-2]['Actual']
 
-#%%
+# %%
 # Ejecutables
-local_exe = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe'
+# local_exe = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe'
+local_exe = 'C:\\Program Files\\MetaTrader 5 Terminal\\terminal64.exe'
 # local_exe = 'C:\\Archivos de programa\\MetaTrader 5 Terminal\\terminal64.exe'
 
 # Número de cuenta
@@ -52,8 +51,5 @@ vs.candle_stick_plot(escenario5)
 # DataFrame escenarios
 
 df_escenarios = fn.func_df_escenarios(indice, symbol, mt5_client)
-
-
-
 
 # %%

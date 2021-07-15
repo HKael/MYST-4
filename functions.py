@@ -214,7 +214,15 @@ def outlier_v(param_data):
     return
 
 
-def op(timestamp, initial, final, maxp, minp, position, tp, sl):
+def op(param_data, position):
+    timestamp = param_data["time"].iloc[0]
+    initial = param_data["open"].iloc[0]
+    final = param_data["open"].iloc[-1]
+    maxp = param_data["high"].max()
+    minp = param_data["low"].min()
+    position = position
+    tp = param_data["close"].iloc[-1]*1.2
+    sl = param_data["close"].iloc[-1]*0.8
     if position == 'Buy':
         tp = initial + tp / 10000
         sl = initial - sl / 10000
@@ -223,8 +231,9 @@ def op(timestamp, initial, final, maxp, minp, position, tp, sl):
         sl = initial + sl / 10000
 
     df = pd.DataFrame(
-        {'Operation Parameter': ['TimeStamp', 'Window', 'Initial Price', 'Final Price', 'Maximum Price', 'Minimum Price',
-                            'Stop Loss', 'Take Profit', 'Volume', 'Capital', 'Position'],
+        {'Operation Parameter': ['TimeStamp', 'Window', 'Initial Price', 'Final Price', 'Maximum Price',
+                                 'Minimum Price',
+                                 'Stop Loss', 'Take Profit', 'Volume', 'Capital', 'Position'],
          'Operation Value': [timestamp, '00:30:00', '$ ' + str(initial), '$ ' + str(final), '$ ' + str(maxp),
                              '$ ' + str(minp),
                              "$ " + str(sl), "$ " + str(tp), int(1000 / initial), '1000 USD', position], })
