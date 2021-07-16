@@ -70,5 +70,45 @@ escenarios_conteovol = escenarios_test.groupby(['Escenario', 'Direccion'])['vola
 
 escenarioa = ['compra', 14, 12, 80]
 escenariob = ['venta', 8, 5, 200]
-escenarioc = ['compra', 3, ]
-escenariod = ['compra']
+escenarioc = ['compra', 15, 9, 110]
+escenariod = ['compra', 7, 4, 250]
+
+df_decisiones = pd.DataFrame(columns=['escenario', 'operacion', 'sl', 'tp', 'volumen'], index=[0,1,2,3])
+df_decisiones.iloc[0] = ['A'] + escenarioa
+df_decisiones.iloc[1] = ['B'] + escenariob
+df_decisiones.iloc[2] = ['C'] + escenarioc
+df_decisiones.iloc[3] = ['D'] + escenariod
+
+df_backtest = pd.DataFrame(columns = ['escenario', 'operacion', 'volumen', 'resultado', 'pips',
+                                      'capital', 'capital_acm'], index = escenarios_test.index)
+
+df_backtest['escenario'] = escenarios_test['Escenario']
+
+for i in range(len(escenarios_test)):
+    operacion = []
+    volumen = []
+    resultado = []
+    pips = []
+    capital = []
+    capita_acm = []
+    if escenarios_test['Escenario'].iloc[i] == 'A':
+        operacioni = df_decisiones['operacion'].iloc[0]
+        operacion.append(operacioni)
+        volumeni = df_decisiones['volumen'].iloc[0]
+        volumen.append(volumeni)
+        pricesi = fnmt5.f_hist_prices_from(mt5_client, [symbol], 'M1', escenarios_test.index[i], 31).get(symbol)
+        ini = pricesi['open'].iloc[0]
+        sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[0]/10000
+        tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[0]/10000
+
+        for i in i in pricesi['close']:
+            if i == sl:
+                resultadoi = 'perdida'
+                pipsi = (pricesi['open'].iloc[0] - pricesi) * 10000
+                capitali = pipsi*volumeni
+
+
+
+
+
+
