@@ -1,6 +1,5 @@
 ## Description
-*Insert here a brief description of the project, including, purpose, technologies used and context 
-where it was created.*
+"Se analiza el comportamiento del USD/CHF durante el comunicado del indicador Unemployment rate  de la economía USA.
 
 ## Install dependencies
 
@@ -15,7 +14,11 @@ Or you can manually install one by one using the name and version in the file.
 *Add here examples of core functionalities for the project in this repository.*
 
 ## Author
-*Add Name and a brief description on who you are.*
+I.F. RENATTA GARCIA SANCHEZ
+
+I. F. MARIO ABEL GARCIA VERDUZCO
+
+I. F. ALEJANDRO MICHEL MARRON
 
 ## License
 **GNU General Public License v3.0** 

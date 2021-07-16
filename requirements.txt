@@ -16,6 +16,7 @@ statsmodels
 MetaTrader5
 scipy
 scikit-posthocs
+pyswarms
 
 
 
