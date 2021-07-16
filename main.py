@@ -102,24 +102,25 @@ for i in range(len(escenarios_test)):
         sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[0]/10000
         tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[0]/10000
 
-        for i in range(len(pricesi)):
-            if pricesi['close'].iloc[i] == sl:
+        for j in range(len(pricesi)):
+            if pricesi['close'].iloc[j] == sl:
                 resultadoi = 'perdida'
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000*volumeni
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000*volumeni
                 break
-            elif pricesi['close'].iloc[i] == tp:
+            elif pricesi['close'].iloc[j] == tp:
                 resultadoi = 'ganada'
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i]- pricesi['open'].iloc[0]) * 10000*volumeni
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j]- pricesi['open'].iloc[0]) * 10000*volumeni
                 break 
-            elif i == len(pricesi) - 1:
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+            elif j == len(pricesi) - 1:
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
                 if capitali <= 0:
                     resultadoi = 'perdida'
                 else:
                     resultadoi = 'ganada'
+                break
         
         resultado.append(resultadoi)
         capital.append(capitali)
@@ -136,24 +137,25 @@ for i in range(len(escenarios_test)):
         tp = pricesi['open'].iloc[0] - df_decisiones['tp'].iloc[1] / 10000
         sl = pricesi['open'].iloc[0] + df_decisiones['sl'].iloc[1] / 10000
 
-        for i in range(len(pricesi)):
+        for j in range(len(pricesi)):
             if pricesi['close'].iloc[i] == sl:
                 resultadoi = 'perdida'
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[i]) * 10000 * volumeni
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[j]) * 10000 * volumeni
                 break
-            elif pricesi['close'].iloc[i] == tp:
+            elif pricesi['close'].iloc[j] == tp:
                 resultadoi = 'ganada'
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[i]) * 10000 * volumeni
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[j]) * 10000 * volumeni
                 break
-            elif i == len(pricesi) - 1:
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[i]) * 10000 * volumeni
+            elif j == len(pricesi) - 1:
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[j]) * 10000 * volumeni
                 if capitali <= 0:
                     resultadoi = 'perdida'
                 else:
                     resultadoi = 'ganada'
+                break
 
         resultado.append(resultadoi)
         capital.append(capitali)
@@ -170,28 +172,28 @@ for i in range(len(escenarios_test)):
         sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[2] / 10000
         tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[2] / 10000
 
-        for i in range(len(pricesi)):
-            if pricesi['close'].iloc[i] == sl:
+        for j in range(len(pricesi)):
+            if pricesi['close'].iloc[j] == sl:
                 resultadoi = 'perdida'
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
                 break
-            elif pricesi['close'].iloc[i] == tp:
+            elif pricesi['close'].iloc[j] == tp:
                 resultadoi = 'ganada'
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
                 break
-            elif i == len(pricesi) - 1:
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+            elif j == len(pricesi) - 1:
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
                 if capitali <= 0:
                     resultadoi = 'perdida'
                 else:
                     resultadoi = 'ganada'
+                break
 
         resultado.append(resultadoi)
         capital.append(capitali)
-        pips.append(pipsi)
         pips.append(pipsi)
 
     if escenarios_test['Escenario'].iloc[i] == 'D':
@@ -205,28 +207,28 @@ for i in range(len(escenarios_test)):
         sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[3] / 10000
         tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[3] / 10000
 
-        for i in i in range(len(pricesi)):
-            if pricesi['close'].iloc[i] == sl:
+        for j  in range(len(pricesi)):
+            if pricesi['close'].iloc[j] == sl:
                 resultadoi = 'perdida'
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
                 break
-            elif pricesi['close'].iloc[i] == tp:
+            elif pricesi['close'].iloc[j] == tp:
                 resultadoi = 'ganada'
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
                 break
-            elif i == len(pricesi) - 1:
-                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
-                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+            elif j == len(pricesi) - 1:
+                pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
                 if capitali <= 0:
                     resultadoi = 'perdida'
                 else:
                     resultadoi = 'ganada'
+                break
 
         resultado.append(resultadoi)
         capital.append(capitali)
-        pips.append(pipsi)
         pips.append(pipsi)
 
 df_backtest['operacion'] = operacion
