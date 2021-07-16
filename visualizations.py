@@ -21,3 +21,12 @@ def candle_stick_plot(df: pd.DataFrame):
     fig.update_layout(title='USD/CHF')
 
     fig.show()
+
+def opt_no_opt(opt, no_opt):
+    fig = go.Figure()
+    capital = opt['capital_acm']
+    date = opt.index
+    fig.add_trace(x=date, y=capital, name='Optimizado', line=dict(color='red'))
+
+    fig.add_trace(x=date, y=no_opt['capital_acm'], name='No optimizado' line=dict(color='blue'))
+    fig.show()
