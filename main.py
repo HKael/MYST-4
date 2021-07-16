@@ -79,18 +79,19 @@ df_decisiones.iloc[1] = ['B'] + escenariob
 df_decisiones.iloc[2] = ['C'] + escenarioc
 df_decisiones.iloc[3] = ['D'] + escenariod
 
-df_backtest = pd.DataFrame(columns = ['escenario', 'operacion', 'volumen', 'resultado', 'pips',
-                                      'capital', 'capital_acm'], index = escenarios_test.index)
+df_backtest = pd.DataFrame(columns=['escenario', 'operacion', 'volumen', 'resultado', 'pips',
+                                      'capital', 'capital_acm'], index=escenarios_test.index)
 
 df_backtest['escenario'] = escenarios_test['Escenario']
 
+operacion = []
+volumen = []
+resultado = []
+pips = []
+capital = []
+
 for i in range(len(escenarios_test)):
-    operacion = []
-    volumen = []
-    resultado = []
-    pips = []
-    capital = []
-    capita_acm = []
+
     if escenarios_test['Escenario'].iloc[i] == 'A':
         operacioni = df_decisiones['operacion'].iloc[0]
         operacion.append(operacioni)
@@ -101,11 +102,142 @@ for i in range(len(escenarios_test)):
         sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[0]/10000
         tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[0]/10000
 
-        for i in i in pricesi['close']:
-            if i == sl:
+        for i in range(len(pricesi)):
+            if pricesi['close'].iloc[i] == sl:
                 resultadoi = 'perdida'
-                pipsi = (pricesi['open'].iloc[0] - pricesi) * 10000
-                capitali = pipsi*volumeni
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000*volumeni
+                break
+            elif pricesi['close'].iloc[i] == tp:
+                resultadoi = 'ganada'
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i]- pricesi['open'].iloc[0]) * 10000*volumeni
+                break 
+            elif i == len(pricesi) - 1:
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                if capitali <= 0:
+                    resultadoi = 'perdida'
+                else:
+                    resultadoi = 'ganada'
+        
+        resultado.append(resultadoi)
+        capital.append(capitali)
+        pips.append(pipsi)
+        
+    if escenarios_test['Escenario'].iloc[i] == 'B':
+        operacioni = df_decisiones['operacion'].iloc[1]
+        operacion.append(operacioni)
+        volumeni = df_decisiones['volumen'].iloc[1]
+        volumen.append(volumeni)
+        pricesi = fnmt5.f_hist_prices_from(mt5_client, [symbol], 'M1', escenarios_test.index[i], 31).get(
+            symbol)
+        ini = pricesi['open'].iloc[0]
+        tp = pricesi['open'].iloc[0] - df_decisiones['tp'].iloc[1] / 10000
+        sl = pricesi['open'].iloc[0] + df_decisiones['sl'].iloc[1] / 10000
+
+        for i in range(len(pricesi)):
+            if pricesi['close'].iloc[i] == sl:
+                resultadoi = 'perdida'
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[i]) * 10000 * volumeni
+                break
+            elif pricesi['close'].iloc[i] == tp:
+                resultadoi = 'ganada'
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[i]) * 10000 * volumeni
+                break
+            elif i == len(pricesi) - 1:
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[i]) * 10000 * volumeni
+                if capitali <= 0:
+                    resultadoi = 'perdida'
+                else:
+                    resultadoi = 'ganada'
+
+        resultado.append(resultadoi)
+        capital.append(capitali)
+        pips.append(pipsi)
+
+    if escenarios_test['Escenario'].iloc[i] == 'C':
+        operacioni = df_decisiones['operacion'].iloc[2]
+        operacion.append(operacioni)
+        volumeni = df_decisiones['volumen'].iloc[2]
+        volumen.append(volumeni)
+        pricesi = fnmt5.f_hist_prices_from(mt5_client, [symbol], 'M1', escenarios_test.index[i], 31).get(
+            symbol)
+        ini = pricesi['open'].iloc[0]
+        sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[2] / 10000
+        tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[2] / 10000
+
+        for i in range(len(pricesi)):
+            if pricesi['close'].iloc[i] == sl:
+                resultadoi = 'perdida'
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                break
+            elif pricesi['close'].iloc[i] == tp:
+                resultadoi = 'ganada'
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                break
+            elif i == len(pricesi) - 1:
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                if capitali <= 0:
+                    resultadoi = 'perdida'
+                else:
+                    resultadoi = 'ganada'
+
+        resultado.append(resultadoi)
+        capital.append(capitali)
+        pips.append(pipsi)
+        pips.append(pipsi)
+
+    if escenarios_test['Escenario'].iloc[i] == 'D':
+        operacioni = df_decisiones['operacion'].iloc[3]
+        operacion.append(operacioni)
+        volumeni = df_decisiones['volumen'].iloc[3]
+        volumen.append(volumeni)
+        pricesi = fnmt5.f_hist_prices_from(mt5_client, [symbol], 'M1', escenarios_test.index[i], 31).get(
+            symbol)
+        ini = pricesi['open'].iloc[0]
+        sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[3] / 10000
+        tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[3] / 10000
+
+        for i in i in range(len(pricesi)):
+            if pricesi['close'].iloc[i] == sl:
+                resultadoi = 'perdida'
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                break
+            elif pricesi['close'].iloc[i] == tp:
+                resultadoi = 'ganada'
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                break
+            elif i == len(pricesi) - 1:
+                pipsi = abs((pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000)
+                capitali = (pricesi['close'].iloc[i] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                if capitali <= 0:
+                    resultadoi = 'perdida'
+                else:
+                    resultadoi = 'ganada'
+
+        resultado.append(resultadoi)
+        capital.append(capitali)
+        pips.append(pipsi)
+        pips.append(pipsi)
+
+df_backtest['operacion'] = operacion
+df_backtest['volumen'] = volumen
+df_backtest['resultado'] = resultado 
+df_backtest['pips'] = pips
+df_backtest['capital'] = capital
+df_backtest['capital_acm'] = df_backtest['capital'].cumsum() + 100000
+
+
+
 
 
 
