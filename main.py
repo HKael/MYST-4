@@ -27,8 +27,8 @@ indice.iloc[-1]['Previous'] = indice.iloc[-2]['Actual']
 # %%
 # Ejecutables
 # local_exe = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe'
-local_exe = 'C:\\Program Files\\MetaTrader 5 Terminal\\terminal64.exe'
-# local_exe = 'C:\\Archivos de programa\\MetaTrader 5 Terminal\\terminal64.exe'
+# local_exe = 'C:\\Program Files\\MetaTrader 5 Terminal\\terminal64.exe'
+local_exe = 'C:\\Archivos de programa\\MetaTrader 5 Terminal\\terminal64.exe'
 
 # Número de cuenta
 mt5_acc = 5383442
@@ -50,6 +50,25 @@ vs.candle_stick_plot(escenario5)
 
 # DataFrame escenarios
 
-df_escenarios = fn.func_df_escenarios(indice, symbol, mt5_client)
+df_escenarios, precios = fn.func_df_escenarios(indice, symbol, mt5_client)
 
 # %%
+# Prueba y entrenamiento
+indice_prueba = indice.iloc[0:13,:]
+indice_train = indice.iloc[13:26,:]
+
+escenarios_prueba = df_escenarios.iloc[0:13,:]
+escenarios_test = df_escenarios.iloc[13:26,:]
+
+# analisis escenarios test
+escenarios_conteodirec = escenarios_test.groupby(['Escenario', 'Direccion'])['Direccion'].count()
+escenarios_conteopipa = escenarios_test.groupby(['Escenario', 'Direccion'])['pip_alcistas'].median()
+escenarios_conteopipamax = escenarios_test.groupby(['Escenario', 'Direccion'])['pip_alcistas'].max()
+escenarios_conteopipb = escenarios_test.groupby(['Escenario', 'Direccion'])['pips_bajistas'].median()
+escenarios_conteopipbmax = escenarios_test.groupby(['Escenario', 'Direccion'])['pips_bajistas'].max()
+escenarios_conteovol = escenarios_test.groupby(['Escenario', 'Direccion'])['volatilidad'].median()
+
+escenarioa = ['compra', 14, 12, 80]
+escenariob = ['venta', 8, 5, 200]
+escenarioc = ['compra', 3, ]
+escenariod = ['compra']

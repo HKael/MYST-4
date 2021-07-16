@@ -7,7 +7,7 @@
 # -- repository: YOUR REPOSITORY URL                                                                     -- #
 # -- --------------------------------------------------------------------------------------------------- -- #
 """
-import grubbs as grubbs
+
 import pandas as pd
 import numpy as np
 import datetime
@@ -70,6 +70,7 @@ def escenarios(fila):
 
 
 def func_df_escenarios(indice: pd.DataFrame, symbol, mt5_client):
+    dic_precios = {}
     df_escenarios_f = pd.DataFrame(index=indice.index)
     df_escenarios_f['Escenario'] = [escenarios(indice.iloc[i].to_list()) for i in range(len(indice))]
 
@@ -93,6 +94,7 @@ def func_df_escenarios(indice: pd.DataFrame, symbol, mt5_client):
         df['time'] = [datetime.datetime.utcfromtimestamp(times) for times in df['time']]
         # Direccion
         direc = df['close'].iloc[-1] - df['open'].iloc[30]
+        dic_precios[i] = df.iloc[30:]
         # Validaciòn de direcciòn
         if direc <= 0:
             direccion.append(1)
@@ -114,7 +116,7 @@ def func_df_escenarios(indice: pd.DataFrame, symbol, mt5_client):
     df_escenarios_f['pips_bajistas'] = pip_bajistas
     df_escenarios_f['volatilidad'] = vol
 
-    return df_escenarios_f
+    return df_escenarios_f, dic_precios
 
 
 # %% Statistical aspect
