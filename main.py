@@ -295,3 +295,171 @@ vol = esc[8:12]
 df_desopt = decisiones(operacion, sl, tp, vol)
 df_backtest_opt = backtest(df_desopt)
 
+def backtest_test(df_decisiones):
+    df_backtest = pd.DataFrame(columns=['escenario', 'operacion', 'volumen', 'resultado', 'pips',
+                                        'capital', 'capital_acm'], index=escenarios_prueba.index)
+
+    df_backtest['escenario'] = escenarios_prueba['Escenario']
+
+    operacion = []
+    volumen = []
+    resultado = []
+    pips = []
+    capital = []
+
+    for i in range(len(escenarios_prueba)):
+
+        if escenarios_test['Escenario'].iloc[i] == 'A':
+            operacioni = df_decisiones['operacion'].iloc[0]
+            operacion.append(operacioni)
+            volumeni = df_decisiones['volumen'].iloc[0]
+            volumen.append(volumeni)
+            pricesi = fnmt5.f_hist_prices_from(mt5_client, [symbol], 'M1', escenarios_prueba.index[i], 31).get(
+                symbol)
+            ini = pricesi['open'].iloc[0]
+            sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[0] / 10000
+            tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[0] / 10000
+
+            for j in range(len(pricesi)):
+                if pricesi['close'].iloc[j] == sl:
+                    resultadoi = 'perdida'
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    break
+                elif pricesi['close'].iloc[j] == tp:
+                    resultadoi = 'ganada'
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    break
+                elif j == len(pricesi) - 1:
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    if capitali <= 0:
+                        resultadoi = 'perdida'
+                    else:
+                        resultadoi = 'ganada'
+                    break
+
+            resultado.append(resultadoi)
+            capital.append(capitali)
+            pips.append(pipsi)
+
+        if escenarios_test['Escenario'].iloc[i] == 'B':
+            operacioni = df_decisiones['operacion'].iloc[1]
+            operacion.append(operacioni)
+            volumeni = df_decisiones['volumen'].iloc[1]
+            volumen.append(volumeni)
+            pricesi = fnmt5.f_hist_prices_from(mt5_client, [symbol], 'M1', escenarios_prueba.index[i], 31).get(
+                symbol)
+            ini = pricesi['open'].iloc[0]
+            tp = pricesi['open'].iloc[0] - df_decisiones['tp'].iloc[1] / 10000
+            sl = pricesi['open'].iloc[0] + df_decisiones['sl'].iloc[1] / 10000
+
+            for j in range(len(pricesi)):
+                if pricesi['close'].iloc[i] == sl:
+                    resultadoi = 'perdida'
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[j]) * 10000 * volumeni
+                    break
+                elif pricesi['close'].iloc[j] == tp:
+                    resultadoi = 'ganada'
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[j]) * 10000 * volumeni
+                    break
+                elif j == len(pricesi) - 1:
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['open'].iloc[0] - pricesi['close'].iloc[j]) * 10000 * volumeni
+                    if capitali <= 0:
+                        resultadoi = 'perdida'
+                    else:
+                        resultadoi = 'ganada'
+                    break
+
+            resultado.append(resultadoi)
+            capital.append(capitali)
+            pips.append(pipsi)
+
+        if escenarios_test['Escenario'].iloc[i] == 'C':
+            operacioni = df_decisiones['operacion'].iloc[2]
+            operacion.append(operacioni)
+            volumeni = df_decisiones['volumen'].iloc[2]
+            volumen.append(volumeni)
+            pricesi = fnmt5.f_hist_prices_from(mt5_client, [symbol], 'M1', escenarios_prueba.index[i], 31).get(
+                symbol)
+            ini = pricesi['open'].iloc[0]
+            sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[2] / 10000
+            tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[2] / 10000
+
+            for j in range(len(pricesi)):
+                if pricesi['close'].iloc[j] == sl:
+                    resultadoi = 'perdida'
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    break
+                elif pricesi['close'].iloc[j] == tp:
+                    resultadoi = 'ganada'
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    break
+                elif j == len(pricesi) - 1:
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    if capitali <= 0:
+                        resultadoi = 'perdida'
+                    else:
+                        resultadoi = 'ganada'
+                    break
+
+            resultado.append(resultadoi)
+            capital.append(capitali)
+            pips.append(pipsi)
+
+        if escenarios_test['Escenario'].iloc[i] == 'D':
+            operacioni = df_decisiones['operacion'].iloc[3]
+            operacion.append(operacioni)
+            volumeni = df_decisiones['volumen'].iloc[3]
+            volumen.append(volumeni)
+            pricesi = fnmt5.f_hist_prices_from(mt5_client, [symbol], 'M1', escenarios_prueba.index[i], 31).get(
+                symbol)
+            ini = pricesi['open'].iloc[0]
+            sl = pricesi['open'].iloc[0] - df_decisiones['sl'].iloc[3] / 10000
+            tp = pricesi['open'].iloc[0] + df_decisiones['tp'].iloc[3] / 10000
+
+            for j in range(len(pricesi)):
+                if pricesi['close'].iloc[j] == sl:
+                    resultadoi = 'perdida'
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    break
+                elif pricesi['close'].iloc[j] == tp:
+                    resultadoi = 'ganada'
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    break
+                elif j == len(pricesi) - 1:
+                    pipsi = abs((pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000)
+                    capitali = (pricesi['close'].iloc[j] - pricesi['open'].iloc[0]) * 10000 * volumeni
+                    if capitali <= 0:
+                        resultadoi = 'perdida'
+                    else:
+                        resultadoi = 'ganada'
+                    break
+
+            resultado.append(resultadoi)
+            capital.append(capitali)
+            pips.append(pipsi)
+
+    df_backtest['operacion'] = operacion
+    df_backtest['volumen'] = volumen
+    df_backtest['resultado'] = resultado
+    df_backtest['pips'] = pips
+    df_backtest['capital'] = capital
+    df_backtest['capital_acm'] = df_backtest['capital'].cumsum() + 100000
+    return df_backtest
+
+df_prueba_no = backtest_test(df_decisiones)
+df_prueba_opt = backtest_test(df_desopt)
+
+
+#vs.opt_no_opt(df_backtest_opt, df_backtest)
+#vs.opt_no_opt(df_prueba_opt, df_prueba_no )
