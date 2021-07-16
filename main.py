@@ -28,9 +28,9 @@ indice.iloc[-1]['Previous'] = indice.iloc[-2]['Actual']
 
 # %%
 # Ejecutables
-# local_exe = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe'
+local_exe = 'C:\\Program Files\\MetaTrader 5\\terminal64.exe'
 # local_exe = 'C:\\Program Files\\MetaTrader 5 Terminal\\terminal64.exe'
-local_exe = 'C:\\Archivos de programa\\MetaTrader 5 Terminal\\terminal64.exe'
+# local_exe = 'C:\\Archivos de programa\\MetaTrader 5 Terminal\\terminal64.exe'
 
 # Número de cuenta
 mt5_acc = 5383442
